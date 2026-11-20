@@ -32,13 +32,16 @@ try {
   console.error(`VIDEO.json is not valid JSON: ${(error as Error).message}`);
   process.exit(1);
 }
+const url = (parsed as { url?: unknown }).url;
 if (
   typeof parsed !== "object" ||
   parsed === null ||
-  typeof (parsed as { url?: unknown }).url !== "string" ||
-  !/^https:\/\/(www\.youtube\.com|youtu\.be)\//.test((parsed as { url: string }).url)
+  typeof url !== "string" ||
+  !/^https:\/\/www\.youtube\.com\/shorts\/[A-Za-z0-9_-]{11}([?#].*)?$/.test(url)
 ) {
-  console.error('VIDEO.json must hold {"url": "https://www.youtube.com/..."}');
+  console.error(
+    'VIDEO.json must hold {"url": "https://www.youtube.com/shorts/<11-character video id>"}'
+  );
   process.exit(1);
 }
 

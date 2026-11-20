@@ -47,3 +47,12 @@ if (
 
 mkdirSync(outDir, { recursive: true });
 writeFileSync(targetPath, videoAddress);
+
+// Verify the write: the output bytes must be exactly the input bytes.
+// A failed or partial write must fail loudly instead of handing the
+// grader a corrupt address.
+const written = readFileSync(targetPath);
+if (!written.equals(videoAddress)) {
+  console.error(`VIDEO.json written to ${targetPath} does not match ${sourcePath}`);
+  process.exit(1);
+}
